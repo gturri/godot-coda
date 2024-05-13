@@ -1,0 +1,37 @@
+[gd_scene load_steps=2 format=3 uid="uid://c3xhxbqn2a8if"]
+
+[ext_resource type="Script" path="res://welcome_screen.gd" id="1_3rou3"]
+
+[node name="WelcomeScreen" type="Node2D"]
+script = ExtResource("1_3rou3")
+
+[node name="HostGame" type="Button" parent="."]
+offset_left = 402.0
+offset_top = 187.0
+offset_right = 493.0
+offset_bottom = 218.0
+text = "Host game"
+
+[node name="ConnectTo" type="Button" parent="."]
+offset_left = 343.0
+offset_top = 387.0
+offset_right = 435.0
+offset_bottom = 418.0
+text = "Connect to"
+
+[node name="Label" type="Label" parent="."]
+offset_left = 443.0
+offset_top = 304.0
+offset_right = 483.0
+offset_bottom = 327.0
+text = "or"
+
+[node name="Address" type="TextEdit" parent="."]
+offset_left = 492.0
+offset_top = 383.0
+offset_right = 659.0
+offset_bottom = 421.0
+text = "127.0.0.1"
+
+[connection signal="pressed" from="HostGame" to="." method="_on_host_game_pressed"]
+[connection signal="pressed" from="ConnectTo" to="." method="_on_connect_to_pressed"]
