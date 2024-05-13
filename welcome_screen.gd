@@ -7,7 +7,20 @@ func _on_host_game_pressed():
 
 func _on_connect_to_pressed():
 	var peer = ENetMultiplayerPeer.new()
-	peer.create_client($Address.get_text(), port)
+	var error = peer.create_client($Address.get_text(), port)
+	if error != OK:
+		print("failed to connect: " + str(error))
+		# TODO: display an error to the player
 	get_tree().get_multiplayer().multiplayer_peer = peer
-	print("set as client")
-	# TODO: handle the case where the client failed to connect
+
+	# TODO: print a message saying it's connecting, give the possibility to cancel, ...
+	multiplayer.connected_to_server.connect(connected)
+	multiplayer.connection_failed.connect(failed_to_connect)
+
+func connected():
+	print("Connected to server")
+	get_tree().change_scene_to_file("res://board.tscn")
+
+func failed_to_connect():
+	print("failed to connect")
+	# TODO: display an error

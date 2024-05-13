@@ -11,3 +11,4 @@ func _ready():
 
 func on_player_connected(id):
 	print("player "+ str(id) + " connected")
+	get_tree().change_scene_to_file("res://board.tscn")
