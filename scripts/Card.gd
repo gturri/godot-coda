@@ -15,12 +15,4 @@ static func compare(a: Card, b: Card) -> bool:
 		return false
 	return a.color == 0
 
-func serialize() -> String:
-	return str(color) + "," + str(value) + "," + str(isVisible)
-
-static func deserialize(data: String) -> Card:
-	var splits := data.split(",")
-	var card = Card.new(int(splits[0]), int(splits[1]))
-	card.isVisible = (splits[2] == "true")
-	return card
 
