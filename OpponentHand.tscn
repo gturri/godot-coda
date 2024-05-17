@@ -1,0 +1,9 @@
+[gd_scene load_steps=3 format=3 uid="uid://xpldwxa845eb"]
+
+[ext_resource type="TileSet" uid="uid://bd4h715agxc40" path="res://CardsTileSet.tres" id="1_wk5ma"]
+[ext_resource type="Script" path="res://OpponentHand.gd" id="2_rj7j0"]
+
+[node name="OpponentHand" type="TileMap"]
+tile_set = ExtResource("1_wk5ma")
+format = 2
+script = ExtResource("2_rj7j0")
