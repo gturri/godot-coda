@@ -18,3 +18,5 @@ position = Vector2(180, 16)
 isCurrentPlayer = false
 
 [connection signal="cardDrawn" from="AvailableTiles" to="." method="on_card_drawn"]
+[connection signal="cardAdded" from="CurrentPlayerHand" to="." method="on_card_added_to_player_hand"]
+[connection signal="cardAdded" from="OpponentHand" to="." method="on_card_added_to_player_hand"]

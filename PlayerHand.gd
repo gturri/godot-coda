@@ -3,6 +3,7 @@ extends TileMap
 var cards: Array[Card] = []
 const sourceId := 0
 @export var isCurrentPlayer := true
+signal cardAdded()
 
 @rpc("any_peer", "call_remote", "reliable")
 func add_card_remotely(serializedCard: String) -> void:
@@ -12,6 +13,7 @@ func add_card(card: Card) -> void:
 	cards.append(card)
 	cards.sort_custom(Card.compare)
 	paint()
+	cardAdded.emit()
 
 func paint() -> void:
 	for i in cards.size():
