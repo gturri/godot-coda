@@ -36,6 +36,7 @@ func paint() -> void:
 			erase_cell(0, tile_pos)
 
 func cardId_to_cellPos(id: int) -> Vector2i:
+	@warning_ignore("integer_division")
 	return Vector2i(id%cardsPerRow, id / cardsPerRow)
 
 func cellPos_to_cardId(cell_pos: Vector2i) -> int:
