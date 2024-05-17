@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://cnekhgng88e36"]
+[gd_scene load_steps=3 format=3 uid="uid://cnekhgng88e36"]
 
 [ext_resource type="PackedScene" uid="uid://dcf5xakj75jbd" path="res://available_tiles.tscn" id="1_lhp38"]
+[ext_resource type="PackedScene" uid="uid://hp0x7r5vkjxv" path="res://CurrentPlayerHand.tscn" id="2_3pi1m"]
 
 [node name="Board" type="Node2D"]
 
 [node name="AvailableTiles" parent="." instance=ExtResource("1_lhp38")]
 position = Vector2(216, 144)
+
+[node name="CurrentPlayerHand" parent="." instance=ExtResource("2_3pi1m")]
+position = Vector2(116, 590)
+
+[connection signal="cardPicked" from="AvailableTiles" to="CurrentPlayerHand" method="add_card"]
