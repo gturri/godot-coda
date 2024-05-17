@@ -4,6 +4,10 @@ var cards: Array[Card] = []
 const sourceId := 0
 @export var isCurrentPlayer := true
 
+@rpc("any_peer", "call_remote", "reliable")
+func add_card_remotely(serializedCard: String) -> void:
+	add_card(CardSerializer.deserialize_card(serializedCard))
+
 func add_card(card: Card) -> void:
 	cards.append(card)
 	cards.sort_custom(Card.compare)
