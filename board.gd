@@ -3,15 +3,19 @@ extends Node2D
 var isInitializationPhase := true
 @export var nbCardsInitially := 4
 
+func _ready():
+	$InfoArea.log_info("Each player must pick " + str(nbCardsInitially) + " cards")
+
 func on_card_drawn(card: Card, card_id: int):
 	if isInitializationPhase:
 		if $CurrentPlayerHand.cards.size() < nbCardsInitially:
 			$AvailableTiles.player_picked_card.rpc(card_id)
 			$CurrentPlayerHand.add_card(card)
 			$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card))
+			if $CurrentPlayerHand.cards.size() == nbCardsInitially and $OpponentHand.cards.size() < nbCardsInitially:
+				$InfoArea.log_info("Waiting for your opponent to pick his or her cards")
 		else:
-			print("User hand is already full")
-			# TODO: display a warning to the player?
+			$InfoArea.log_warning("you already have enough cards")
 			return
 	else:
 		pass #TODO

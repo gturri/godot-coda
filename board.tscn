@@ -1,8 +1,9 @@
-[gd_scene load_steps=4 format=3 uid="uid://cnekhgng88e36"]
+[gd_scene load_steps=5 format=3 uid="uid://cnekhgng88e36"]
 
 [ext_resource type="Script" path="res://board.gd" id="1_8lpg8"]
 [ext_resource type="PackedScene" uid="uid://dcf5xakj75jbd" path="res://available_tiles.tscn" id="1_lhp38"]
 [ext_resource type="PackedScene" uid="uid://hp0x7r5vkjxv" path="res://PlayerHand.tscn" id="2_3pi1m"]
+[ext_resource type="PackedScene" uid="uid://7nus6x8j4goo" path="res://InfoArea.tscn" id="4_xewae"]
 
 [node name="Board" type="Node2D"]
 script = ExtResource("1_8lpg8")
@@ -16,6 +17,12 @@ position = Vector2(116, 590)
 [node name="OpponentHand" parent="." instance=ExtResource("2_3pi1m")]
 position = Vector2(180, 16)
 isCurrentPlayer = false
+
+[node name="InfoArea" parent="." instance=ExtResource("4_xewae")]
+offset_left = 770.0
+offset_top = 4.0
+offset_right = 1151.0
+offset_bottom = 648.0
 
 [connection signal="cardDrawn" from="AvailableTiles" to="." method="on_card_drawn"]
 [connection signal="cardAdded" from="CurrentPlayerHand" to="." method="on_card_added_to_player_hand"]
