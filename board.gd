@@ -1,6 +1,7 @@
 extends Node2D
 
 var isInitializationPhase := true
+var isTurnOfTheServerSidePlayer: bool
 @export var nbCardsInitially := 4
 
 func _ready():
@@ -25,3 +26,16 @@ func on_card_added_to_player_hand():
 		and $OpponentHand.cards.size() == nbCardsInitially:
 		isInitializationPhase = false
 		print("initialization completed")
+		if multiplayer.is_server():
+			isTurnOfTheServerSidePlayer = randi() % 2
+			set_active_player.rpc(isTurnOfTheServerSidePlayer)
+			log_active_player()
+
+@rpc("authority", "call_remote", "reliable")
+func set_active_player(isTurnOfTheServerSidePlayer_p: bool) -> void:
+	isTurnOfTheServerSidePlayer = isTurnOfTheServerSidePlayer_p
+	log_active_player()
+
+func log_active_player() -> void:
+	var isCurrentPlayerTurn = (multiplayer.is_server() == isTurnOfTheServerSidePlayer)
+	$InfoArea.log_info("It is your turn" if isCurrentPlayerTurn else "It is the turn of your opponent")
