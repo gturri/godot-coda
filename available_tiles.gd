@@ -57,7 +57,6 @@ func _input(event):
 		var cell_pos: Vector2i = local_to_map(click_pos-position)
 		var card_id: int = cellPos_to_cardId(cell_pos)
 		if card_id < 0 or card_id > cards.size() or not cards[card_id]:
-			print("click was not on a card, we ignore it")
 			return
 		cardDrawn.emit(cards[card_id], card_id)
 
