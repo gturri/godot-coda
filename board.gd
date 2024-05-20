@@ -5,6 +5,7 @@ var isTurnOfTheServerSidePlayer: bool
 
 enum Phase {INITIALIZATION, OPPONENT_TURN, PICK_CARD_ON_THE_TABLE, GUESS_OPPONENT_CARD, DECIDE_WHAT_TO_DO_WITH_PICKED_CARD}
 var phase := Phase.INITIALIZATION
+var selectedOpponentCardId
 
 func _ready():
 	$InfoArea.log_info("Each player must pick " + str(nbCardsInitially) + " cards")
@@ -23,6 +24,11 @@ func on_card_drawn(card: Card, card_id: int):
 	elif phase == Phase.PICK_CARD_ON_THE_TABLE:
 		$AvailableTiles.player_picked_card.rpc(card_id)
 		start_phase_guess_opponent_card(card)
+
+func on_selected_opponent_card(cardId) -> void:
+	if phase == Phase.GUESS_OPPONENT_CARD:
+		selectedOpponentCardId = cardId
+		$OpponentHand.set_opponent_selected_card(cardId)
 
 func on_card_added_to_player_hand():
 	if $CurrentPlayerHand.cards.size() == nbCardsInitially \
