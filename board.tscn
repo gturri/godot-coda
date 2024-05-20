@@ -24,6 +24,12 @@ offset_top = 4.0
 offset_right = 1151.0
 offset_bottom = 648.0
 
+[node name="PickedCard" type="TextureRect" parent="."]
+offset_left = 13.0
+offset_top = 503.0
+offset_right = 53.0
+offset_bottom = 543.0
+
 [connection signal="cardDrawn" from="AvailableTiles" to="." method="on_card_drawn"]
 [connection signal="cardAdded" from="CurrentPlayerHand" to="." method="on_card_added_to_player_hand"]
 [connection signal="cardAdded" from="OpponentHand" to="." method="on_card_added_to_player_hand"]
