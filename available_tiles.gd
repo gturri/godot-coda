@@ -22,6 +22,12 @@ func draw_cards() -> void:
 			cards.append(Card.new(c, v))
 	cards.shuffle()
 
+func is_empty() -> bool:
+	for c in cards:
+		if c:
+			return false
+	return true
+
 @rpc("authority", "call_remote", "reliable")
 func initialize_cards_remotely(cardsSerialized: String) -> void:
 	cards = CardSerializer.deserialize_deck(cardsSerialized)
@@ -31,7 +37,7 @@ func paint() -> void:
 	for i in cards.size():
 		var tile_pos: Vector2i = cardId_to_cellPos(i)
 		if cards[i]:
-			set_cell(0, tile_pos, sourceId, card_to_tile(cards[i]))
+			set_cell(0, tile_pos, sourceId, card_to_tile(cards[i], false))
 		else:
 			erase_cell(0, tile_pos)
 
@@ -42,9 +48,8 @@ func cardId_to_cellPos(id: int) -> Vector2i:
 func cellPos_to_cardId(cell_pos: Vector2i) -> int:
 	return cell_pos.y*cardsPerRow + cell_pos.x
 
-func card_to_tile(card: Card) -> Vector2i:
-#	return Vector2i(card.value, 2*card.color) # for manual debug: display the card values
-	return Vector2i(card.value, 2*card.color + 1)
+func card_to_tile(card: Card, visibleSide: bool) -> Vector2i:
+	return Vector2i(card.value, 2*card.color + (0 if visibleSide else 1))
 
 func _input(event):
 	if event.is_action_pressed("select_card"):
@@ -60,3 +65,9 @@ func _input(event):
 func player_picked_card(card_id: int) -> void:
 	cards[card_id] = null
 	paint()
+
+func get_card_texture(card: Card) -> Texture2D:
+	var source: TileSetAtlasSource = get_tileset().get_source(sourceId)
+	var textureRegion: Rect2i = source.get_tile_texture_region(card_to_tile(card, true))
+	var tileImage: Image = source.texture.get_image().get_region(textureRegion)
+	return ImageTexture.create_from_image(tileImage)
