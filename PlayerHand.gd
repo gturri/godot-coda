@@ -55,7 +55,7 @@ func _input(event):
 		var cell_pos: Vector2i = local_to_map(click_pos-position)
 		if cell_pos.y != 0:
 			return
-		var card_id: int = cell_pos.x * tile_set.tile_size.x
-		if card_id < 0 or card_id > cards.size():
+		var card_id: int = cell_pos.x
+		if card_id < 0 or card_id >= cards.size():
 			return
 		selectedCard.emit(card_id)
