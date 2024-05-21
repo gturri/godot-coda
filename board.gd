@@ -8,6 +8,7 @@ var phase := Phase.INITIALIZATION
 var selectedOpponentCardId
 
 func _ready():
+	$GuessACardHUD.hide()
 	$InfoArea.log_info("Each player must pick " + str(nbCardsInitially) + " cards")
 
 func on_card_drawn(card: Card, card_id: int):
@@ -65,5 +66,23 @@ func start_phase_guess_opponent_card(card) -> void:
 	if card:
 		$PickedCard.show()
 		$PickedCard.set_texture($AvailableTiles.get_card_texture(card))
+	$GuessACardHUD.show()
 	$InfoArea.log_info("Click the card in your opponent hand that you want to guess and enter a number")
 	# TODO: display the Controls to select a number and validate
+
+
+func on_guess_button_pressed() -> void:
+	if phase != Phase.GUESS_OPPONENT_CARD: # The button should not be displayed, but it seems safer to check
+		return
+	if selectedOpponentCardId == null:
+		$InfoArea.log_warning("you must select the card you want to guess in your opponent hand")
+		return
+	if not $GuessACardHUD/GuessTheNumberInput.text.is_valid_int():
+		$InfoArea.log_warning("you must guess a number")
+		return
+	var guessedValue = $GuessACardHUD/GuessTheNumberInput.text.to_int()
+	if guessedValue < 1 or guessedValue > $AvailableTiles.maxValue:
+		$InfoArea.log_warning("The value must be in the range [1, " + str($AvailableTiles.maxValue) + "]")
+		return
+	# TODO: complete that phase
+
