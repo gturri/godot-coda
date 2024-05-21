@@ -10,6 +10,7 @@ var cardPickedDuringPlayerTurn
 
 func _ready():
 	$GuessACardHUD.hide()
+	$DecideWhatToDoAfterASuccessfulGuessHUD.hide()
 	$InfoArea.log_info("Each player must pick " + str(nbCardsInitially) + " cards")
 
 func on_card_drawn(card: Card, card_id: int):
@@ -104,7 +105,7 @@ func on_guess_button_pressed() -> void:
 		opponent_guessed_a_card.rpc(selectedOpponentCardId)
 		if not $OpponentHand.has_hidden_cards():
 			active_player_won.rpc()
-		# TODO
+		start_decideWhatToDo_phase()
 	else:
 		opponent_failed_a_guess.rpc(selectedOpponentCardId, guessedValue)
 		$InfoArea.log_info("Your guess was incorrect. Your turn ends.")
@@ -139,3 +140,24 @@ func opponent_guessed_a_card(cardId: int) -> void:
 func opponent_failed_a_guess(cardId: int, cardValue: int) -> void:
 	$InfoArea.log_info("Your opponent tried saying that your card in position " + str(cardId + 1) + " is " + str(cardValue) + \
 	 ". He or she missed (actual value: " + str($CurrentPlayerHand.cards[cardId].value+1) + ")")
+
+func start_decideWhatToDo_phase() -> void:
+	phase = Phase.DECIDE_WHAT_TO_DO_AFTER_A_SUCCESSFUL_GUESS
+	$GuessACardHUD.hide()
+	$DecideWhatToDoAfterASuccessfulGuessHUD.show()
+
+func on_keep_guessing_button_pressed():
+	$DecideWhatToDoAfterASuccessfulGuessHUD.hide()
+	log_info_on_other_player.rpc("Your opponent decide to guess once more.")
+	start_phase_guess_opponent_card(cardPickedDuringPlayerTurn)
+
+func on_stop_your_turn_button_pressed():
+	update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn)
+	$DecideWhatToDoAfterASuccessfulGuessHUD.hide()
+	$InfoArea.log_info("The card you picked is added hidden in your hand.")
+	log_info_on_other_player.rpc("Your opponent stopped his or her turns. A new hidden card is added to his or her hand.")
+	end_of_turn_cleanup()
+
+@rpc("any_peer", "call_remote", "reliable")
+func log_info_on_other_player(message: String) -> void:
+	$InfoArea.log_info(message)

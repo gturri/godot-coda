@@ -46,6 +46,22 @@ offset_right = 115.0
 offset_bottom = 230.0
 text = "Guess"
 
+[node name="DecideWhatToDoAfterASuccessfulGuessHUD" type="Node2D" parent="."]
+
+[node name="KeepGuessingButton" type="Button" parent="DecideWhatToDoAfterASuccessfulGuessHUD"]
+offset_left = 23.0
+offset_top = 379.0
+offset_right = 165.0
+offset_bottom = 410.0
+text = "Guess once more"
+
+[node name="StopYourTurnButton" type="Button" parent="DecideWhatToDoAfterASuccessfulGuessHUD"]
+offset_left = 26.0
+offset_top = 330.0
+offset_right = 147.0
+offset_bottom = 361.0
+text = "Stop your turn"
+
 [node name="GameOverStatus" type="Label" parent="."]
 offset_left = 123.0
 offset_top = 200.0
@@ -59,3 +75,5 @@ theme_override_font_sizes/font_size = 100
 [connection signal="cardAdded" from="OpponentHand" to="." method="on_card_added_to_player_hand"]
 [connection signal="selectedCard" from="OpponentHand" to="." method="on_selected_opponent_card"]
 [connection signal="pressed" from="GuessACardHUD/GuessButton" to="." method="on_guess_button_pressed"]
+[connection signal="pressed" from="DecideWhatToDoAfterASuccessfulGuessHUD/KeepGuessingButton" to="." method="on_keep_guessing_button_pressed"]
+[connection signal="pressed" from="DecideWhatToDoAfterASuccessfulGuessHUD/StopYourTurnButton" to="." method="on_stop_your_turn_button_pressed"]
