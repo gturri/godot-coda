@@ -6,6 +6,7 @@ var isTurnOfTheServerSidePlayer: bool
 enum Phase {INITIALIZATION, OPPONENT_TURN, PICK_CARD_ON_THE_TABLE, GUESS_OPPONENT_CARD, DECIDE_WHAT_TO_DO_WITH_PICKED_CARD}
 var phase := Phase.INITIALIZATION
 var selectedOpponentCardId
+var cardPickedDuringPlayerTurn
 
 func _ready():
 	$GuessACardHUD.hide()
@@ -15,8 +16,7 @@ func on_card_drawn(card: Card, card_id: int):
 	if phase == Phase.INITIALIZATION:
 		if $CurrentPlayerHand.cards.size() < nbCardsInitially:
 			$AvailableTiles.player_picked_card.rpc(card_id)
-			$CurrentPlayerHand.add_card(card)
-			$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card))
+			update_local_and_remote_hand_with_added_card(card)
 			if $CurrentPlayerHand.cards.size() == nbCardsInitially and $OpponentHand.cards.size() < nbCardsInitially:
 				$InfoArea.log_info("Waiting for your opponent to pick his or her cards")
 		else:
@@ -26,13 +26,18 @@ func on_card_drawn(card: Card, card_id: int):
 		$AvailableTiles.player_picked_card.rpc(card_id)
 		start_phase_guess_opponent_card(card)
 
+func update_local_and_remote_hand_with_added_card(card: Card) -> void:
+	$CurrentPlayerHand.add_card(card)
+	$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card))
+
 func on_selected_opponent_card(cardId) -> void:
 	if phase == Phase.GUESS_OPPONENT_CARD:
 		selectedOpponentCardId = cardId
 		$OpponentHand.set_opponent_selected_card(cardId)
 
 func on_card_added_to_player_hand():
-	if $CurrentPlayerHand.cards.size() == nbCardsInitially \
+	if phase == Phase.INITIALIZATION \
+		and $CurrentPlayerHand.cards.size() == nbCardsInitially \
 		and $OpponentHand.cards.size() == nbCardsInitially:
 		print("initialization completed")
 		if multiplayer.is_server():
@@ -51,6 +56,11 @@ func log_active_player() -> void:
 func is_current_player_turn() -> bool:
 	return multiplayer.is_server() == isTurnOfTheServerSidePlayer
 
+@rpc("any_peer", "call_local", "reliable")
+func change_player_and_start_new_turn() -> void:
+	isTurnOfTheServerSidePlayer = not isTurnOfTheServerSidePlayer
+	start_new_turn()
+
 func start_new_turn() -> void:
 	log_active_player()
 	if not is_current_player_turn():
@@ -63,6 +73,7 @@ func start_new_turn() -> void:
 
 func start_phase_guess_opponent_card(card) -> void:
 	phase = Phase.GUESS_OPPONENT_CARD
+	cardPickedDuringPlayerTurn = card
 	if card:
 		$PickedCard.show()
 		$PickedCard.set_texture($AvailableTiles.get_card_texture(card))
@@ -90,24 +101,34 @@ func on_guess_button_pressed() -> void:
 		return
 
 	if guessedValue == guessedCard.value+1:
-		print("Guessed correctly")
 		guessedCard.isVisible = true
 		$OpponentHand.paint()
 		opponent_guessed_a_card.rpc(selectedOpponentCardId)
 		# TODO
 	else:
-		print("Guess incorrect")
 		opponent_failed_a_guess.rpc(selectedOpponentCardId, guessedValue)
-		pass
-		# TODO: complete that phase
+		$InfoArea.log_info("Your guess was incorrect. Your turn ends.")
+		if cardPickedDuringPlayerTurn:
+			$InfoArea.log_info("The card you picked is added visible in your hand.")
+			cardPickedDuringPlayerTurn.isVisible = true
+			update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn)
+		end_of_turn_cleanup()
+
+func end_of_turn_cleanup() -> void:
+	selectedOpponentCardId = null
+	$OpponentHand.clear_opponent_selected_card()
+	cardPickedDuringPlayerTurn = null
+	$PickedCard.hide()
+	$GuessACardHUD.hide()
+	change_player_and_start_new_turn.rpc()
 
 @rpc("any_peer", "call_remote", "reliable")
-func opponent_guessed_a_card(cardId: int):
+func opponent_guessed_a_card(cardId: int) -> void:
 	$InfoArea.log_info("Your card in position " + str(cardId+1) + " has been guessed!")
 	$CurrentPlayerHand.cards[cardId].isVisible = true
 	$CurrentPlayerHand.paint()
 
 @rpc("any_peer", "call_remote", "reliable")
-func opponent_failed_a_guess(cardId: int, cardValue: int):
+func opponent_failed_a_guess(cardId: int, cardValue: int) -> void:
 	$InfoArea.log_info("Your opponent tried saying that your card in position " + str(cardId + 1) + " is " + str(cardValue) + \
 	 ". He or she missed (actual value: " + str($CurrentPlayerHand.cards[cardId].value+1) + ")")
