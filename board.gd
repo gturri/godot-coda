@@ -3,7 +3,7 @@ extends Node2D
 var isTurnOfTheServerSidePlayer: bool
 @export var nbCardsInitially := 4
 
-enum Phase {INITIALIZATION, OPPONENT_TURN, PICK_CARD_ON_THE_TABLE, GUESS_OPPONENT_CARD, DECIDE_WHAT_TO_DO_WITH_PICKED_CARD}
+enum Phase {INITIALIZATION, OPPONENT_TURN, PICK_CARD_ON_THE_TABLE, GUESS_OPPONENT_CARD, DECIDE_WHAT_TO_DO_AFTER_A_SUCCESSFUL_GUESS, GAME_OVER}
 var phase := Phase.INITIALIZATION
 var selectedOpponentCardId
 var cardPickedDuringPlayerTurn
@@ -79,8 +79,6 @@ func start_phase_guess_opponent_card(card) -> void:
 		$PickedCard.set_texture($AvailableTiles.get_card_texture(card))
 	$GuessACardHUD.show()
 	$InfoArea.log_info("Click the card in your opponent hand that you want to guess and enter a number")
-	# TODO: display the Controls to select a number and validate
-
 
 func on_guess_button_pressed() -> void:
 	if phase != Phase.GUESS_OPPONENT_CARD: # The button should not be displayed, but it seems safer to check
@@ -104,6 +102,8 @@ func on_guess_button_pressed() -> void:
 		guessedCard.isVisible = true
 		$OpponentHand.paint()
 		opponent_guessed_a_card.rpc(selectedOpponentCardId)
+		if not $OpponentHand.has_hidden_cards():
+			active_player_won.rpc()
 		# TODO
 	else:
 		opponent_failed_a_guess.rpc(selectedOpponentCardId, guessedValue)
@@ -113,6 +113,13 @@ func on_guess_button_pressed() -> void:
 			cardPickedDuringPlayerTurn.isVisible = true
 			update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn)
 		end_of_turn_cleanup()
+
+@rpc("any_peer", "call_local", "reliable")
+func active_player_won() -> void:
+	phase = Phase.GAME_OVER
+	var message = "YOU WON!" if is_current_player_turn() else "Your opponent won"
+	$InfoArea.log_info("message")
+	$GameOverStatus.set_text(message)
 
 func end_of_turn_cleanup() -> void:
 	selectedOpponentCardId = null

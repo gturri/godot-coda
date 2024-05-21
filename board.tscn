@@ -46,6 +46,14 @@ offset_right = 145.0
 offset_bottom = 411.0
 text = "Guess"
 
+[node name="GameOverStatus" type="Label" parent="."]
+offset_left = 123.0
+offset_top = 200.0
+offset_right = 1076.0
+offset_bottom = 337.0
+theme_override_colors/font_color = Color(0.827451, 0, 0, 1)
+theme_override_font_sizes/font_size = 100
+
 [connection signal="cardDrawn" from="AvailableTiles" to="." method="on_card_drawn"]
 [connection signal="cardAdded" from="CurrentPlayerHand" to="." method="on_card_added_to_player_hand"]
 [connection signal="cardAdded" from="OpponentHand" to="." method="on_card_added_to_player_hand"]

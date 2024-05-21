@@ -19,6 +19,12 @@ func add_card(card: Card) -> void:
 	paint()
 	cardAdded.emit()
 
+func has_hidden_cards() -> bool:
+	for i in cards.size():
+		if not cards[i].isVisible:
+			return true
+	return false
+
 func paint() -> void:
 	free_and_delete_previous_textureRects()
 	for i in cards.size():
