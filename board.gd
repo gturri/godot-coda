@@ -93,9 +93,21 @@ func on_guess_button_pressed() -> void:
 		print("Guessed correctly")
 		guessedCard.isVisible = true
 		$OpponentHand.paint()
+		opponent_guessed_a_card.rpc(selectedOpponentCardId)
 		# TODO
 	else:
 		print("Guess incorrect")
+		opponent_failed_a_guess.rpc(selectedOpponentCardId, guessedValue)
 		pass
 		# TODO: complete that phase
 
+@rpc("any_peer", "call_remote", "reliable")
+func opponent_guessed_a_card(cardId: int):
+	$InfoArea.log_info("Your card in position " + str(cardId+1) + " has been guessed!")
+	$CurrentPlayerHand.cards[cardId].isVisible = true
+	$CurrentPlayerHand.paint()
+
+@rpc("any_peer", "call_remote", "reliable")
+func opponent_failed_a_guess(cardId: int, cardValue: int):
+	$InfoArea.log_info("Your opponent tried saying that your card in position " + str(cardId + 1) + " is " + str(cardValue) + \
+	 ". He or she missed (actual value: " + str($CurrentPlayerHand.cards[cardId].value+1) + ")")
