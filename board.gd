@@ -77,12 +77,25 @@ func on_guess_button_pressed() -> void:
 	if selectedOpponentCardId == null:
 		$InfoArea.log_warning("you must select the card you want to guess in your opponent hand")
 		return
+	var guessedCard: Card = $OpponentHand.cards[selectedOpponentCardId]
+	if guessedCard.isVisible:
+		$InfoArea.log_warning("you must select a card not known yet!")
+		return
 	if not $GuessACardHUD/GuessTheNumberInput.text.is_valid_int():
 		$InfoArea.log_warning("you must guess a number")
 		return
-	var guessedValue = $GuessACardHUD/GuessTheNumberInput.text.to_int()
+	var guessedValue :int = $GuessACardHUD/GuessTheNumberInput.text.to_int()
 	if guessedValue < 1 or guessedValue > $AvailableTiles.maxValue:
 		$InfoArea.log_warning("The value must be in the range [1, " + str($AvailableTiles.maxValue) + "]")
 		return
-	# TODO: complete that phase
+
+	if guessedValue == guessedCard.value+1:
+		print("Guessed correctly")
+		guessedCard.isVisible = true
+		$OpponentHand.paint()
+		# TODO
+	else:
+		print("Guess incorrect")
+		pass
+		# TODO: complete that phase
 
