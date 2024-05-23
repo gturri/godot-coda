@@ -56,7 +56,7 @@ func _input(event):
 		var click_pos: Vector2 = get_global_mouse_position()
 		var cell_pos: Vector2i = local_to_map(click_pos-position)
 		var card_id: int = cellPos_to_cardId(cell_pos)
-		if card_id < 0 or card_id > cards.size() or not cards[card_id]:
+		if card_id < 0 or card_id >= cards.size() or not cards[card_id]:
 			return
 		cardDrawn.emit(cards[card_id], card_id)
 
