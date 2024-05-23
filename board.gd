@@ -70,11 +70,6 @@ func opponent_guessed_a_card(cardId: int) -> void:
 	$CurrentPlayerHand.cards[cardId].isVisible = true
 	$CurrentPlayerHand.paint()
 
-@rpc("any_peer", "call_remote", "reliable")
-func opponent_failed_a_guess(cardId: int, cardValue: int) -> void:
-	$InfoArea.log_info("Your opponent tried saying that your card in position " + str(cardId + 1) + " is " + str(cardValue) + \
-	 ". He or she missed (actual value: " + str($CurrentPlayerHand.cards[cardId].value+1) + ")")
-
 func on_keep_guessing_button_pressed() -> void:
 	currentState.on_keep_guessing_button_pressed()
 

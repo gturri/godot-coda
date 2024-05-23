@@ -48,7 +48,8 @@ func on_guess_button_pressed() -> void:
 			context.active_player_won.rpc()
 		start_decideWhatToDo_phase()
 	else:
-		context.opponent_failed_a_guess.rpc(selectedOpponentCardId, guessedValue)
+		context.log_info_on_other_player.rpc("Your opponent tried saying that your card in position " + str(selectedOpponentCardId + 1) + " is " + str(guessedValue) + \
+		 ". He or she missed (actual value: " + str(context.get_node("CurrentPlayerHand").cards[selectedOpponentCardId].value+1) + ")")
 		context.get_node("InfoArea").log_info("Your guess was incorrect. Your turn ends.")
 		if cardPickedDuringPlayerTurn:
 			context.get_node("InfoArea").log_info("The card you picked is added visible in your hand.")
