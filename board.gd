@@ -46,10 +46,7 @@ func start_new_turn() -> void:
 	elif not $AvailableTiles.is_empty():
 		currentState = PickCardOnTheTableState.new(self)
 	else:
-		start_phase_guess_opponent_card(null)
-
-func start_phase_guess_opponent_card(card) -> void:
-	currentState = GuessOpponentCardState.new(self, card)
+		currentState = GuessOpponentCardState.new(self, null)
 
 func on_guess_button_pressed() -> void:
 	currentState.on_guess_button_pressed()
@@ -57,12 +54,6 @@ func on_guess_button_pressed() -> void:
 @rpc("any_peer", "call_local", "reliable")
 func active_player_won() -> void:
 	currentState = GameOverState.new(self)
-
-func end_of_turn_cleanup() -> void: #TODO: shall this remain here?
-	$OpponentHand.clear_opponent_selected_card()
-	$PickedCard.hide()
-	$GuessACardHUD.hide()
-	change_player_and_start_new_turn.rpc()
 
 @rpc("any_peer", "call_remote", "reliable")
 func opponent_guessed_a_card(cardId: int) -> void:
