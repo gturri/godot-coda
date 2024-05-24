@@ -1,3 +1,4 @@
+extends BaseState
 class_name InitializationState
 
 var context
@@ -16,9 +17,6 @@ func on_card_drawn(card: Card, card_id: int) -> void:
 	else:
 		context.get_node("InfoArea").log_warning("you already have enough cards")
 
-func on_selected_opponent_card(_cardId) -> void:
-	pass
-
 func on_card_added_to_player_hand() -> void:
 	if context.get_node("CurrentPlayerHand").cards.size() == context.nbCardsInitially \
 		and context.get_node("OpponentHand").cards.size() == context.nbCardsInitially:
@@ -26,12 +24,3 @@ func on_card_added_to_player_hand() -> void:
 			context.isTurnOfTheServerSidePlayer = randi() % 2
 			context.set_active_player.rpc(context.isTurnOfTheServerSidePlayer)
 			context.start_new_turn()
-
-func on_guess_button_pressed() -> void:
-	pass
-
-func on_stop_your_turn_button_pressed() -> void:
-	pass
-
-func on_keep_guessing_button_pressed() -> void:
-	pass

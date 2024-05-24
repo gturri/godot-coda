@@ -1,3 +1,4 @@
+extends BaseState
 class_name GuessOpponentCardState
 
 var context
@@ -14,15 +15,9 @@ func _init(context_p, cardPickedDuringPlayerTurn_p):
 	context.get_node("GuessACardHUD").show()
 	context.get_node("InfoArea").log_info("Click the card in your opponent hand that you want to guess and enter a number")
 
-func on_card_drawn(_card: Card, _card_id: int) -> void:
-	pass
-
 func on_selected_opponent_card(cardId) -> void:
 	selectedOpponentCardId = cardId
 	context.get_node("OpponentHand").set_opponent_selected_card(cardId)
-
-func on_card_added_to_player_hand() -> void:
-	pass
 
 func on_guess_button_pressed() -> void:
 	if selectedOpponentCardId == null:
@@ -60,9 +55,3 @@ func on_guess_button_pressed() -> void:
 func start_decideWhatToDo_phase() -> void:
 	context.get_node("GuessACardHUD").hide()
 	context.currentState = DecideWhatToDoAfterASuccessfulGuessState.new(context, cardPickedDuringPlayerTurn)
-
-func on_stop_your_turn_button_pressed() -> void:
-	pass
-
-func on_keep_guessing_button_pressed() -> void:
-	pass

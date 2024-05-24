@@ -1,3 +1,4 @@
+extends BaseState
 class_name DecideWhatToDoAfterASuccessfulGuessState
 
 var context
@@ -7,18 +8,6 @@ func _init(context_p, cardPickedDuringPlayerTurn_p):
 	context = context_p
 	cardPickedDuringPlayerTurn = cardPickedDuringPlayerTurn_p
 	context.get_node("DecideWhatToDoAfterASuccessfulGuessHUD").show()
-
-func on_card_drawn(_card: Card, _card_id: int) -> void:
-	pass
-
-func on_selected_opponent_card(_cardId) -> void:
-	pass
-
-func on_card_added_to_player_hand() -> void:
-	pass
-
-func on_guess_button_pressed() -> void:
-	pass
 
 func on_stop_your_turn_button_pressed():
 	var remoteMessage = "Your opponent stopped his or her turns." 
@@ -34,4 +23,3 @@ func on_keep_guessing_button_pressed() -> void:
 	context.get_node("DecideWhatToDoAfterASuccessfulGuessHUD").hide()
 	context.log_info_on_other_player.rpc("Your opponent decide to guess once more.")
 	context.start_phase_guess_opponent_card(cardPickedDuringPlayerTurn)
-
