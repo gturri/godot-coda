@@ -1,5 +1,10 @@
 class_name BaseState
 
+var context
+
+func _init(context_p):
+	context = context_p
+
 func on_card_drawn(_card: Card, _card_id: int) -> void:
 	pass
 

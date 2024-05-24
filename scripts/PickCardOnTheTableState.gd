@@ -1,8 +1,6 @@
 extends BaseState
 class_name PickCardOnTheTableState
 
-var context
-
 func _init(context_p):
 	context = context_p
 	context.get_node("InfoArea").log_info("Pick a card on the table")

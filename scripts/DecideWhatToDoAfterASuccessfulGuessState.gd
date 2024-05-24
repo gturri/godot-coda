@@ -1,7 +1,6 @@
 extends BaseState
 class_name DecideWhatToDoAfterASuccessfulGuessState
 
-var context
 var cardPickedDuringPlayerTurn
 
 func _init(context_p, cardPickedDuringPlayerTurn_p):

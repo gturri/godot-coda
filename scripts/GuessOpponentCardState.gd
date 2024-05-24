@@ -1,10 +1,8 @@
 extends BaseState
 class_name GuessOpponentCardState
 
-var context
 var cardPickedDuringPlayerTurn
 var selectedOpponentCardId
-
 
 func _init(context_p, cardPickedDuringPlayerTurn_p):
 	context = context_p

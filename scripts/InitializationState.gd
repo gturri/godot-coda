@@ -1,8 +1,6 @@
 extends BaseState
 class_name InitializationState
 
-var context
-
 func _init(context_p):
 	context = context_p
 
