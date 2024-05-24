@@ -45,7 +45,9 @@ func cardId_to_cellPos(id: int) -> Vector2i:
 	@warning_ignore("integer_division")
 	return Vector2i(id%cardsPerRow, id / cardsPerRow)
 
-func cellPos_to_cardId(cell_pos: Vector2i) -> int:
+func cellPos_to_cardId(cell_pos: Vector2i):
+	if cell_pos.x < 0 or cell_pos.x >= cardsPerRow:
+		return null
 	return cell_pos.y*cardsPerRow + cell_pos.x
 
 func card_to_tile(card: Card, visibleSide: bool) -> Vector2i:
@@ -55,8 +57,8 @@ func _input(event):
 	if event.is_action_pressed("select_card"):
 		var click_pos: Vector2 = get_global_mouse_position()
 		var cell_pos: Vector2i = local_to_map(click_pos-position)
-		var card_id: int = cellPos_to_cardId(cell_pos)
-		if card_id < 0 or card_id >= cards.size() or not cards[card_id]:
+		var card_id = cellPos_to_cardId(cell_pos)
+		if not card_id or card_id < 0 or card_id >= cards.size() or not cards[card_id]:
 			return
 		cardDrawn.emit(cards[card_id], card_id)
 
