@@ -4,7 +4,6 @@ class_name InitializationState
 func _init(context_p):
 	context = context_p
 
-
 func on_card_drawn(card: Card, card_id: int) -> void:
 	if context.get_node("CurrentPlayerHand").cards.size() < context.nbCardsInitially:
 		context.get_node("AvailableTiles").player_picked_card.rpc(card_id)

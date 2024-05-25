@@ -2,26 +2,30 @@ extends Node2D
 
 var isTurnOfTheServerSidePlayer: bool
 @export var nbCardsInitially := 4
-var currentState
+var state: BaseState
 
 func _ready():
 	$GuessACardHUD.hide()
 	$DecideWhatToDoAfterASuccessfulGuessHUD.hide()
 	$InfoArea.log_info("Each player must pick " + str(nbCardsInitially) + " cards")
-	currentState = InitializationState.new(self)
+	set_state(InitializationState.new(self))
+
+func set_state(newState: BaseState) -> void:
+	state = newState
+	state.on_enter_state()
 
 func on_card_drawn(card: Card, card_id: int) -> void:
-	currentState.on_card_drawn(card, card_id)
+	state.on_card_drawn(card, card_id)
 
 func update_local_and_remote_hand_with_added_card(card: Card) -> void:
 	$CurrentPlayerHand.add_card(card)
 	$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card))
 
 func on_selected_opponent_card(cardId) -> void:
-	currentState.on_selected_opponent_card(cardId)
+	state.on_selected_opponent_card(cardId)
 
 func on_card_added_to_player_hand() -> void:
-	currentState.on_card_added_to_player_hand()
+	state.on_card_added_to_player_hand()
 
 @rpc("authority", "call_remote", "reliable")
 func set_active_player(isTurnOfTheServerSidePlayer_p: bool) -> void:
@@ -42,18 +46,18 @@ func change_player_and_start_new_turn() -> void:
 func start_new_turn() -> void:
 	log_active_player()
 	if not is_current_player_turn():
-		currentState = OpponentTurnState.new(self)
+		set_state(OpponentTurnState.new(self))
 	elif not $AvailableTiles.is_empty():
-		currentState = PickCardOnTheTableState.new(self)
+		set_state(PickCardOnTheTableState.new(self))
 	else:
-		currentState = GuessOpponentCardState.new(self, null)
+		set_state(GuessOpponentCardState.new(self, null))
 
 func on_guess_button_pressed() -> void:
-	currentState.on_guess_button_pressed()
+	state.on_guess_button_pressed()
 
 @rpc("any_peer", "call_local", "reliable")
 func active_player_won() -> void:
-	currentState = GameOverState.new(self)
+	set_state(GameOverState.new(self))
 
 @rpc("any_peer", "call_remote", "reliable")
 func opponent_guessed_a_card(cardId: int) -> void:
@@ -62,10 +66,10 @@ func opponent_guessed_a_card(cardId: int) -> void:
 	$CurrentPlayerHand.paint()
 
 func on_keep_guessing_button_pressed() -> void:
-	currentState.on_keep_guessing_button_pressed()
+	state.on_keep_guessing_button_pressed()
 
 func on_stop_your_turn_button_pressed() -> void:
-	currentState.on_stop_your_turn_button_pressed()
+	state.on_stop_your_turn_button_pressed()
 
 @rpc("any_peer", "call_remote", "reliable")
 func log_info_on_other_player(message: String) -> void:

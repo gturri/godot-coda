@@ -7,12 +7,11 @@ var selectedOpponentCardId
 func _init(context_p, cardPickedDuringPlayerTurn_p):
 	context = context_p
 	cardPickedDuringPlayerTurn = cardPickedDuringPlayerTurn_p
+
+func on_enter_state():
 	if cardPickedDuringPlayerTurn:
 		context.get_node("PickedCard").show()
 		context.get_node("PickedCard").set_texture(context.get_node("AvailableTiles").get_card_texture(cardPickedDuringPlayerTurn))
-	re_enter_state()
-
-func re_enter_state():
 	context.get_node("GuessACardHUD").show()
 	context.get_node("InfoArea").log_info("Click the card in your opponent hand that you want to guess and enter a number")
 
@@ -55,7 +54,7 @@ func on_guess_button_pressed() -> void:
 
 func start_decideWhatToDo_phase() -> void:
 	context.get_node("GuessACardHUD").hide()
-	context.currentState = DecideWhatToDoAfterASuccessfulGuessState.new(context, self)
+	context.set_state(DecideWhatToDoAfterASuccessfulGuessState.new(context, self))
 
 func _notification(notif):
 	if notif == NOTIFICATION_PREDELETE: # Destructor; see https://docs.godotengine.org/en/4.2/tutorials/best_practices/godot_notifications.html

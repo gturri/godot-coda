@@ -1,11 +1,13 @@
 extends BaseState
 class_name DecideWhatToDoAfterASuccessfulGuessState
 
-var onHoldGuessOpponentCardState
+var onHoldGuessOpponentCardState: GuessOpponentCardState
 
-func _init(context_p, onHoldGuessOpponentCardState_p):
+func _init(context_p, onHoldGuessOpponentCardState_p: GuessOpponentCardState):
 	context = context_p
 	onHoldGuessOpponentCardState = onHoldGuessOpponentCardState_p
+
+func on_enter_state() -> void:
 	context.get_node("DecideWhatToDoAfterASuccessfulGuessHUD").show()
 
 func on_stop_your_turn_button_pressed():
@@ -21,5 +23,4 @@ func on_stop_your_turn_button_pressed():
 func on_keep_guessing_button_pressed() -> void:
 	context.get_node("DecideWhatToDoAfterASuccessfulGuessHUD").hide()
 	context.log_info_on_other_player.rpc("Your opponent decide to guess once more.")
-	onHoldGuessOpponentCardState.re_enter_state()
-	context.currentState = onHoldGuessOpponentCardState
+	context.set_state(onHoldGuessOpponentCardState)
