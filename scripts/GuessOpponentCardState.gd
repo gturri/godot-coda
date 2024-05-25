@@ -59,4 +59,5 @@ func start_decideWhatToDo_phase() -> void:
 func _notification(notif):
 	if notif == NOTIFICATION_PREDELETE: # Destructor; see https://docs.godotengine.org/en/4.2/tutorials/best_practices/godot_notifications.html
 		context.get_node("PickedCard").hide()
+		context.get_node("GuessACardHUD").hide()
 		context.get_node("OpponentHand").clear_opponent_selected_card()
