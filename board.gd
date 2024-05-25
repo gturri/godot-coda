@@ -53,9 +53,9 @@ func start_new_turn() -> void:
 func on_guess_button_pressed() -> void:
 	state.on_guess_button_pressed()
 
-@rpc("any_peer", "call_local", "reliable")
-func active_player_won() -> void:
-	set_state(GameOverState.new(self))
+@rpc("any_peer", "call_remote", "reliable")
+func game_ended() -> void:
+	state.on_game_ended()
 
 @rpc("any_peer", "call_remote", "reliable")
 func opponent_guessed_a_card(cardId: int) -> void:

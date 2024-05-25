@@ -40,7 +40,9 @@ func on_guess_button_pressed() -> void:
 		context.get_node("OpponentHand").paint()
 		context.opponent_guessed_a_card.rpc(selectedOpponentCardId)
 		if not context.get_node("OpponentHand").has_hidden_cards():
-			context.active_player_won.rpc()
+			context.game_ended.rpc()
+			context.set_state(GameOverState.new(context, true))
+			return
 		start_decideWhatToDo_phase()
 	else:
 		context.log_info_on_other_player.rpc("Your opponent tried saying that your card in position " + str(selectedOpponentCardId + 1) + " is " + str(guessedValue) + \

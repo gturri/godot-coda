@@ -25,3 +25,6 @@ func on_stop_your_turn_button_pressed() -> void:
 
 func on_keep_guessing_button_pressed() -> void:
 	pass
+
+func on_game_ended() -> void:
+	pass
