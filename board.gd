@@ -47,10 +47,8 @@ func start_new_turn() -> void:
 	log_active_player()
 	if not is_current_player_turn():
 		set_state(OpponentTurnState.new(self))
-	elif not $AvailableTiles.is_empty():
-		set_state(PickCardOnTheTableState.new(self))
 	else:
-		set_state(GuessOpponentCardState.new(self, null))
+		set_state(PickCardOnTheTableState.new(self))
 
 func on_guess_button_pressed() -> void:
 	state.on_guess_button_pressed()
