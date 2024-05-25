@@ -5,7 +5,7 @@ func _init(context_p):
 	context = context_p
 
 func on_enter_state() -> void:
-	context.log_active_player()
+	context.get_node("InfoArea").log_info("It is your turn")
 	if not context.get_node("AvailableTiles").is_empty():
 		context.get_node("InfoArea").log_info("Pick a card on the table")
 	else:

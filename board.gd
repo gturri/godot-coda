@@ -32,9 +32,6 @@ func set_active_player(isTurnOfTheServerSidePlayer_p: bool) -> void:
 	isTurnOfTheServerSidePlayer = isTurnOfTheServerSidePlayer_p
 	start_new_turn()
 
-func log_active_player() -> void:
-	$InfoArea.log_info("It is your turn" if is_current_player_turn() else "It is the turn of your opponent")
-
 func is_current_player_turn() -> bool:
 	return multiplayer.is_server() == isTurnOfTheServerSidePlayer
 
@@ -44,7 +41,6 @@ func change_player_and_start_new_turn() -> void:
 	start_new_turn()
 
 func start_new_turn() -> void:
-	log_active_player()
 	if not is_current_player_turn():
 		set_state(OpponentTurnState.new(self))
 	else:
