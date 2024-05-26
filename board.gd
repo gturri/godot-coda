@@ -19,7 +19,7 @@ func on_card_drawn(card: Card, card_id: int, cardPosition: Vector2) -> void:
 
 func update_local_and_remote_hand_with_added_card(card: Card, cardPositionOnBoard: Vector2) -> void:
 	$CurrentPlayerHand.add_card(card, cardPositionOnBoard)
-	$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card))
+	$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card), cardPositionOnBoard)
 
 func on_selected_opponent_card(cardId) -> void:
 	state.on_selected_opponent_card(cardId)

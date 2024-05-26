@@ -12,8 +12,8 @@ var opponentSelectedCardIndex
 @export var transitionDurationInSecond :float = 0.5
 
 @rpc("any_peer", "call_remote", "reliable")
-func add_card_remotely(serializedCard: String) -> void:
-	add_card(CardSerializer.deserialize_card(serializedCard), Vector2.ZERO)
+func add_card_remotely(serializedCard: String, initialPositionOnTheBoard) -> void:
+	add_card(CardSerializer.deserialize_card(serializedCard), initialPositionOnTheBoard)
 
 func add_card(card: Card, initialPositionOnTheBoard: Vector2) -> void:
 	cards.append(card)
