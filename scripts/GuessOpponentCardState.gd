@@ -36,13 +36,12 @@ func on_guess_button_pressed() -> void:
 		return
 
 	if guessedValue == guessedCard.value+1:
-		__on_correct_guess(guessedCard)
+		__on_correct_guess(selectedOpponentCardId)
 	else:
 		__on_bad_guess(guessedValue, guessedCard)
 
-func __on_correct_guess(guessedCard: Card) -> void:
-	guessedCard.isVisible = true
-	context.get_node("OpponentHand").paint()
+func __on_correct_guess(selectedOpponentCardId: int) -> void:
+	context.get_node("OpponentHand").mark_card_visible(selectedOpponentCardId)
 	context.opponent_guessed_a_card.rpc(selectedOpponentCardId)
 	if not context.get_node("OpponentHand").has_hidden_cards():
 		context.game_ended.rpc()
@@ -57,7 +56,7 @@ func __on_bad_guess(guessedValue: int, guessedCard: Card) -> void:
 	if cardPickedDuringPlayerTurn:
 		context.get_node("InfoArea").log_info("The card you picked is added visible in your hand.")
 		cardPickedDuringPlayerTurn.isVisible = true
-		context.update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn)
+		context.update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn, context.get_node("PickedCard"))
 	context.change_player_and_start_new_turn.rpc()
 
 func start_decideWhatToDo_phase() -> void:

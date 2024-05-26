@@ -14,11 +14,11 @@ func set_state(newState: BaseState) -> void:
 	state = newState
 	state.on_enter_state()
 
-func on_card_drawn(card: Card, card_id: int) -> void:
-	state.on_card_drawn(card, card_id)
+func on_card_drawn(card: Card, card_id: int, cardPosition: Vector2) -> void:
+	state.on_card_drawn(card, card_id, cardPosition)
 
-func update_local_and_remote_hand_with_added_card(card: Card) -> void:
-	$CurrentPlayerHand.add_card(card)
+func update_local_and_remote_hand_with_added_card(card: Card, cardPositionOnBoard: Vector2) -> void:
+	$CurrentPlayerHand.add_card(card, cardPositionOnBoard)
 	$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card))
 
 func on_selected_opponent_card(cardId) -> void:
@@ -56,8 +56,7 @@ func game_ended() -> void:
 @rpc("any_peer", "call_remote", "reliable")
 func opponent_guessed_a_card(cardId: int) -> void:
 	$InfoArea.log_info("Your card in position " + str(cardId+1) + " has been guessed!")
-	$CurrentPlayerHand.cards[cardId].isVisible = true
-	$CurrentPlayerHand.paint()
+	$CurrentPlayerHand.make_card_visible(cardId)
 
 func on_keep_guessing_button_pressed() -> void:
 	state.on_keep_guessing_button_pressed()
