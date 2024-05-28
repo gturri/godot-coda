@@ -43,11 +43,11 @@ func on_guess_button_pressed() -> void:
 		return
 
 	if guessedValue == guessedCard.value+1:
-		__on_correct_guess(selectedOpponentCardId)
+		__on_correct_guess()
 	else:
 		__on_bad_guess(guessedValue, guessedCard)
 
-func __on_correct_guess(selectedOpponentCardId: int) -> void:
+func __on_correct_guess() -> void:
 	context.get_node("OpponentHand").make_card_visible(selectedOpponentCardId)
 	context.opponent_guessed_a_card.rpc(selectedOpponentCardId)
 	if not context.get_node("OpponentHand").has_hidden_cards():
