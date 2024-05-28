@@ -41,7 +41,7 @@ func on_guess_button_pressed() -> void:
 		__on_bad_guess(guessedValue, guessedCard)
 
 func __on_correct_guess(selectedOpponentCardId: int) -> void:
-	context.get_node("OpponentHand").mark_card_visible(selectedOpponentCardId)
+	context.get_node("OpponentHand").make_card_visible(selectedOpponentCardId)
 	context.opponent_guessed_a_card.rpc(selectedOpponentCardId)
 	if not context.get_node("OpponentHand").has_hidden_cards():
 		context.game_ended.rpc()

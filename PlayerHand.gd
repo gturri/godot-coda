@@ -32,7 +32,7 @@ func has_hidden_cards() -> bool:
 func make_card_visible(cardId: int) -> void:
 	var card = cards[cardId]
 	card.isVisible = true
-	var currentCardTextureRect = cardsToTextures[cardId]
+	var currentCardTextureRect = cardsToTextures[cards[cardId]]
 	var newCardTextureRect = get_card_textureRect(card)
 	newCardTextureRect.position = currentCardTextureRect.position
 	cardsToTextures[card] = newCardTextureRect
