@@ -56,7 +56,7 @@ func __on_bad_guess(guessedValue: int, guessedCard: Card) -> void:
 	if cardPickedDuringPlayerTurn:
 		context.get_node("InfoArea").log_info("The card you picked is added visible in your hand.")
 		cardPickedDuringPlayerTurn.isVisible = true
-		context.update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn, context.get_node("PickedCard"))
+		context.update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn, context.get_node("PickedCard").position)
 	context.change_player_and_start_new_turn.rpc()
 
 func start_decideWhatToDo_phase() -> void:
