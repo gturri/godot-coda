@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://dwv77q82becke"]
+
+[ext_resource type="Script" path="res://CardInPlayerHand.gd" id="1_fkqoq"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_epj7n"]
+size = Vector2(64, 64)
+
+[node name="CardInPlayerHand" type="Area2D"]
+script = ExtResource("1_fkqoq")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(32, 32)
+shape = SubResource("RectangleShape2D_epj7n")
+
+[node name="TextureRect" type="TextureRect" parent="."]
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 39.0
+offset_bottom = 39.0

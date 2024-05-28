@@ -5,7 +5,7 @@ const sourceId := 0
 @export var maxValue := 11
 @export var cardsPerRow := 5
 var cards: Array[Card] = []
-signal cardDrawn(card: Card, card_id: int)
+signal cardDrawn(card: Card, card_id: int, cardPosition: Vector2)
 
 func _ready():
 	if not multiplayer.is_server():
@@ -60,7 +60,7 @@ func _input(event):
 		var card_id = cellPos_to_cardId(cell_pos)
 		if card_id == null or card_id < 0 or card_id >= cards.size() or not cards[card_id]:
 			return
-		cardDrawn.emit(cards[card_id], card_id)
+		cardDrawn.emit(cards[card_id], card_id, click_pos)
 
 @rpc("any_peer", "call_local", "reliable")
 func player_picked_card(card_id: int) -> void:

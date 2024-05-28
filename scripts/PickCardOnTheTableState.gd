@@ -11,6 +11,6 @@ func on_enter_state() -> void:
 	else:
 		context.set_state(GuessOpponentCardState.new(context, null))
 
-func on_card_drawn(card: Card, card_id: int) -> void:
+func on_card_drawn(card: Card, card_id: int, _cardPosition: Vector2) -> void:
 	context.get_node("AvailableTiles").player_picked_card.rpc(card_id)
 	context.set_state(GuessOpponentCardState.new(context, card))

@@ -13,7 +13,7 @@ func on_enter_state() -> void:
 func on_stop_your_turn_button_pressed():
 	var remoteMessage = "Your opponent stopped his or her turns." 
 	if onHoldGuessOpponentCardState.cardPickedDuringPlayerTurn:
-		context.update_local_and_remote_hand_with_added_card(onHoldGuessOpponentCardState.cardPickedDuringPlayerTurn)
+		context.update_local_and_remote_hand_with_added_card(onHoldGuessOpponentCardState.cardPickedDuringPlayerTurn, context.get_node("PickedCard").position)
 		context.get_node("InfoArea").log_info("The card you picked is added hidden in your hand.")
 		remoteMessage += " A new hidden card is added to his or her hand."
 	context.log_info_on_other_player.rpc(remoteMessage)

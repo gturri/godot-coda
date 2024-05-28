@@ -12,10 +12,10 @@ script = ExtResource("1_8lpg8")
 position = Vector2(216, 144)
 
 [node name="CurrentPlayerHand" parent="." instance=ExtResource("2_3pi1m")]
-position = Vector2(116, 590)
+position = Vector2(444, 587)
 
 [node name="OpponentHand" parent="." instance=ExtResource("2_3pi1m")]
-position = Vector2(180, 16)
+position = Vector2(429, 10)
 isCurrentPlayer = false
 
 [node name="InfoArea" parent="." instance=ExtResource("4_xewae")]

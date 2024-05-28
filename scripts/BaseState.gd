@@ -8,7 +8,7 @@ func _init(context_p):
 func on_enter_state() -> void:
 	pass
 
-func on_card_drawn(_card: Card, _card_id: int) -> void:
+func on_card_drawn(_card: Card, _card_id: int, _cardPosition: Vector2) -> void:
 	pass
 
 func on_selected_opponent_card(_cardId) -> void:
