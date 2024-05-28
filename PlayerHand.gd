@@ -32,12 +32,18 @@ func has_hidden_cards() -> bool:
 func make_card_visible(cardId: int) -> void:
 	var card = cards[cardId]
 	card.isVisible = true
-	var currentCardTextureRect = cardsToTextures[card]
-	var newCardTextureRect = get_card_textureRect(card)
-	newCardTextureRect.position = currentCardTextureRect.position
-	cardsToTextures[card] = newCardTextureRect
-	add_child(newCardTextureRect)
-	currentCardTextureRect.queue_free()
+	if isCurrentPlayer:
+		var overlay := create_overlay()
+		overlay.position = cardsToTextures[card].position
+		cardsToOverlay[cardId] = overlay
+		add_child(overlay)
+	else:
+		var currentCardTextureRect = cardsToTextures[card]
+		var newCardTextureRect = get_card_textureRect(card)
+		newCardTextureRect.position = currentCardTextureRect.position
+		cardsToTextures[card] = newCardTextureRect
+		add_child(newCardTextureRect)
+		currentCardTextureRect.queue_free()
 
 func paint(initialPositionNewCard: Vector2) -> void:
 	cardsToId.clear()
