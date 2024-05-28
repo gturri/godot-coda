@@ -24,11 +24,8 @@ offset_top = 4.0
 offset_right = 1151.0
 offset_bottom = 648.0
 
-[node name="PickedCard" type="TextureRect" parent="."]
-offset_left = 13.0
-offset_top = 503.0
-offset_right = 53.0
-offset_bottom = 543.0
+[node name="PickedCardOverviewPosition" type="Node2D" parent="."]
+position = Vector2(68, 460)
 
 [node name="GuessACardHUD" type="Node2D" parent="."]
 

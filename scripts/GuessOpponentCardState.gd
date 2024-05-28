@@ -3,15 +3,22 @@ class_name GuessOpponentCardState
 
 var cardPickedDuringPlayerTurn
 var selectedOpponentCardId
+var initialPositionOfTheCardPicked
+var pickedCardTextureRect
 
-func _init(context_p, cardPickedDuringPlayerTurn_p):
+func _init(context_p, cardPickedDuringPlayerTurn_p, initialPositionOfTheCardPicked_p):
 	context = context_p
 	cardPickedDuringPlayerTurn = cardPickedDuringPlayerTurn_p
+	initialPositionOfTheCardPicked = initialPositionOfTheCardPicked_p
 
 func on_enter_state():
-	if cardPickedDuringPlayerTurn:
-		context.get_node("PickedCard").show()
-		context.get_node("PickedCard").set_texture(context.get_node("AvailableTiles").get_card_texture(cardPickedDuringPlayerTurn))
+	if cardPickedDuringPlayerTurn and not pickedCardTextureRect:
+		pickedCardTextureRect = TextureRect.new()
+		pickedCardTextureRect.set_texture(context.get_node("AvailableTiles").get_card_texture(cardPickedDuringPlayerTurn))
+		pickedCardTextureRect.position = initialPositionOfTheCardPicked
+		context.add_child(pickedCardTextureRect)
+		var tween = context.get_tree().create_tween()
+		tween.tween_property(pickedCardTextureRect, "position", context.get_node("PickedCardOverviewPosition").position, 0.5)
 	context.get_node("GuessACardHUD").show()
 	context.get_node("InfoArea").log_info("Click the card in your opponent hand that you want to guess and enter a number")
 
@@ -56,7 +63,7 @@ func __on_bad_guess(guessedValue: int, guessedCard: Card) -> void:
 	if cardPickedDuringPlayerTurn:
 		context.get_node("InfoArea").log_info("The card you picked is added visible in your hand.")
 		cardPickedDuringPlayerTurn.isVisible = true
-		context.update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn, context.get_node("PickedCard").position)
+		context.update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn, context.get_node("PickedCardOverviewPosition").position)
 	context.change_player_and_start_new_turn.rpc()
 
 func start_decideWhatToDo_phase() -> void:
@@ -65,6 +72,6 @@ func start_decideWhatToDo_phase() -> void:
 
 func _notification(notif):
 	if notif == NOTIFICATION_PREDELETE: # Destructor; see https://docs.godotengine.org/en/4.2/tutorials/best_practices/godot_notifications.html
-		context.get_node("PickedCard").hide()
+		pickedCardTextureRect.queue_free()
 		context.get_node("GuessACardHUD").hide()
 		context.get_node("OpponentHand").clear_opponent_selected_card()

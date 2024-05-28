@@ -9,8 +9,8 @@ func on_enter_state() -> void:
 	if not context.get_node("AvailableTiles").is_empty():
 		context.get_node("InfoArea").log_info("Pick a card on the table")
 	else:
-		context.set_state(GuessOpponentCardState.new(context, null))
+		context.set_state(GuessOpponentCardState.new(context, null, null))
 
-func on_card_drawn(card: Card, card_id: int, _cardPosition: Vector2) -> void:
+func on_card_drawn(card: Card, card_id: int, cardPosition: Vector2) -> void:
 	context.get_node("AvailableTiles").player_picked_card.rpc(card_id)
-	context.set_state(GuessOpponentCardState.new(context, card))
+	context.set_state(GuessOpponentCardState.new(context, card, cardPosition))
