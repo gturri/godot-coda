@@ -13,6 +13,7 @@ func _init(context_p, cardPickedDuringPlayerTurn_p, initialPositionOfTheCardPick
 
 func on_enter_state():
 	if cardPickedDuringPlayerTurn and not pickedCardTextureRect:
+		context.play_audio_picked_card.rpc()
 		pickedCardTextureRect = TextureRect.new()
 		pickedCardTextureRect.set_texture(context.get_node("AvailableTiles").get_card_texture(cardPickedDuringPlayerTurn, true))
 		pickedCardTextureRect.position = initialPositionOfTheCardPicked

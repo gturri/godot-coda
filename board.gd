@@ -18,6 +18,7 @@ func on_card_drawn(card: Card, card_id: int, cardPosition: Vector2) -> void:
 	state.on_card_drawn(card, card_id, cardPosition)
 
 func update_local_and_remote_hand_with_added_card(card: Card, cardPositionOnBoardForLocalPlayer: Vector2, cardPositionOnBoardForRemotePlayer: Vector2) -> void:
+	play_audio_picked_card.rpc()
 	$CurrentPlayerHand.add_card(card, cardPositionOnBoardForLocalPlayer)
 	$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card), cardPositionOnBoardForRemotePlayer)
 
@@ -67,6 +68,10 @@ func on_keep_guessing_button_pressed() -> void:
 
 func on_stop_your_turn_button_pressed() -> void:
 	state.on_stop_your_turn_button_pressed()
+
+@rpc("any_peer", "call_local", "reliable")
+func play_audio_picked_card() -> void:
+	$Audio/PickedCard.play()
 
 @rpc("any_peer", "call_remote", "reliable")
 func log_info_on_other_player(message: String) -> void:

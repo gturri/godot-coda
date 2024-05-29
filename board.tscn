@@ -1,9 +1,10 @@
-[gd_scene load_steps=5 format=3 uid="uid://cnekhgng88e36"]
+[gd_scene load_steps=6 format=3 uid="uid://cnekhgng88e36"]
 
 [ext_resource type="Script" path="res://board.gd" id="1_8lpg8"]
 [ext_resource type="PackedScene" uid="uid://dcf5xakj75jbd" path="res://available_tiles.tscn" id="1_lhp38"]
 [ext_resource type="PackedScene" uid="uid://hp0x7r5vkjxv" path="res://PlayerHand.tscn" id="2_3pi1m"]
 [ext_resource type="PackedScene" uid="uid://7nus6x8j4goo" path="res://InfoArea.tscn" id="4_xewae"]
+[ext_resource type="AudioStream" uid="uid://cafg1ghew25px" path="res://audio/cardPlace1.ogg" id="5_tg5pk"]
 
 [node name="Board" type="Node2D"]
 script = ExtResource("1_8lpg8")
@@ -69,6 +70,11 @@ offset_right = 1076.0
 offset_bottom = 337.0
 theme_override_colors/font_color = Color(0.827451, 0, 0, 1)
 theme_override_font_sizes/font_size = 100
+
+[node name="Audio" type="Node" parent="."]
+
+[node name="PickedCard" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("5_tg5pk")
 
 [connection signal="cardDrawn" from="AvailableTiles" to="." method="on_card_drawn"]
 [connection signal="cardAdded" from="CurrentPlayerHand" to="." method="on_card_added_to_player_hand"]
