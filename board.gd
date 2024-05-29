@@ -79,6 +79,12 @@ func play_audio_successful_guess() -> void:
 func play_audio_failed_guess() -> void:
 	$Audio/FailedGuess.play()
 
+func play_audio_lost() -> void:
+	$Audio/GameOverLost.play()
+
+func play_audio_won() -> void:
+	$Audio/GameOverWon.play()
+
 @rpc("any_peer", "call_remote", "reliable")
 func log_info_on_other_player(message: String) -> void:
 	$InfoArea.log_info(message)

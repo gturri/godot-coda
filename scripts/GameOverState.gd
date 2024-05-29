@@ -9,5 +9,6 @@ func _init(context_p, currentPlayerWon_p: bool):
 
 func on_enter_state() -> void:
 	var message = "YOU WON!" if currentPlayerWon else "Your opponent won"
+	context.play_audio_won() if currentPlayerWon else context.play_audio_lost()
 	context.get_node("InfoArea").log_info("message")
 	context.get_node("GameOverStatus").set_text(message)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://cnekhgng88e36"]
+[gd_scene load_steps=10 format=3 uid="uid://cnekhgng88e36"]
 
 [ext_resource type="Script" path="res://board.gd" id="1_8lpg8"]
 [ext_resource type="PackedScene" uid="uid://dcf5xakj75jbd" path="res://available_tiles.tscn" id="1_lhp38"]
@@ -7,6 +7,8 @@
 [ext_resource type="AudioStream" uid="uid://cafg1ghew25px" path="res://audio/cardPlace1.ogg" id="5_tg5pk"]
 [ext_resource type="AudioStream" uid="uid://doelc3wgcj8lk" path="res://audio/confirmation_004.ogg" id="6_rka2n"]
 [ext_resource type="AudioStream" uid="uid://bdh08wb1ycsfb" path="res://audio/error_002.ogg" id="7_h5cha"]
+[ext_resource type="AudioStream" uid="uid://dj2htqdsnyu04" path="res://audio/jingles_NES00.ogg" id="8_jmibl"]
+[ext_resource type="AudioStream" uid="uid://cdw08cd7ewba6" path="res://audio/jingles_HIT01.ogg" id="9_y5hy7"]
 
 [node name="Board" type="Node2D"]
 script = ExtResource("1_8lpg8")
@@ -83,6 +85,12 @@ stream = ExtResource("6_rka2n")
 
 [node name="FailedGuess" type="AudioStreamPlayer" parent="Audio"]
 stream = ExtResource("7_h5cha")
+
+[node name="GameOverLost" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("8_jmibl")
+
+[node name="GameOverWon" type="AudioStreamPlayer" parent="Audio"]
+stream = ExtResource("9_y5hy7")
 
 [connection signal="cardDrawn" from="AvailableTiles" to="." method="on_card_drawn"]
 [connection signal="cardAdded" from="CurrentPlayerHand" to="." method="on_card_added_to_player_hand"]
