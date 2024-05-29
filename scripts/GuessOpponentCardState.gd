@@ -50,6 +50,7 @@ func on_guess_button_pressed() -> void:
 		__on_bad_guess(guessedValue, guessedCard)
 
 func __on_correct_guess() -> void:
+	context.play_audio_successful_guess()
 	context.get_node("OpponentHand").make_card_visible(selectedOpponentCardId)
 	context.opponent_guessed_a_card.rpc(selectedOpponentCardId)
 	if not context.get_node("OpponentHand").has_hidden_cards():
@@ -59,6 +60,7 @@ func __on_correct_guess() -> void:
 	start_decideWhatToDo_phase()
 
 func __on_bad_guess(guessedValue: int, guessedCard: Card) -> void:
+	context.play_audio_failed_guess()
 	context.log_info_on_other_player.rpc("Your opponent tried saying that your card in position " + str(selectedOpponentCardId + 1) + " is " + str(guessedValue) + \
 		 ". He or she missed (actual value: " + str(guessedCard.value+1) + ")")
 	context.get_node("InfoArea").log_info("Your guess was incorrect. Your turn ends.")

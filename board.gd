@@ -73,6 +73,12 @@ func on_stop_your_turn_button_pressed() -> void:
 func play_audio_picked_card() -> void:
 	$Audio/PickedCard.play()
 
+func play_audio_successful_guess() -> void:
+	$Audio/SuccessfulGuess.play()
+
+func play_audio_failed_guess() -> void:
+	$Audio/FailedGuess.play()
+
 @rpc("any_peer", "call_remote", "reliable")
 func log_info_on_other_player(message: String) -> void:
 	$InfoArea.log_info(message)
