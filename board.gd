@@ -17,9 +17,9 @@ func set_state(newState: BaseState) -> void:
 func on_card_drawn(card: Card, card_id: int, cardPosition: Vector2) -> void:
 	state.on_card_drawn(card, card_id, cardPosition)
 
-func update_local_and_remote_hand_with_added_card(card: Card, cardPositionOnBoard: Vector2) -> void:
-	$CurrentPlayerHand.add_card(card, cardPositionOnBoard)
-	$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card), cardPositionOnBoard)
+func update_local_and_remote_hand_with_added_card(card: Card, cardPositionOnBoardForLocalPlayer: Vector2, cardPositionOnBoardForRemotePlayer: Vector2) -> void:
+	$CurrentPlayerHand.add_card(card, cardPositionOnBoardForLocalPlayer)
+	$OpponentHand.add_card_remotely.rpc(CardSerializer.serialize_card(card), cardPositionOnBoardForRemotePlayer)
 
 func on_selected_opponent_card(cardId) -> void:
 	state.on_selected_opponent_card(cardId)
@@ -52,6 +52,10 @@ func on_guess_button_pressed() -> void:
 @rpc("any_peer", "call_remote", "reliable")
 func game_ended() -> void:
 	state.on_game_ended()
+
+@rpc("any_peer", "call_remote", "reliable")
+func opponent_picked_card_at_the_beginning_of_the_turn(serializedCard: String, initialPosition: Vector2) -> void:
+	state.opponent_picked_card_at_the_beginning_of_the_turn(CardSerializer.deserialize_card(serializedCard), initialPosition)
 
 @rpc("any_peer", "call_remote", "reliable")
 func opponent_guessed_a_card(cardId: int) -> void:

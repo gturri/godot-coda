@@ -27,6 +27,9 @@ offset_bottom = 648.0
 [node name="PickedCardOverviewPosition" type="Node2D" parent="."]
 position = Vector2(68, 460)
 
+[node name="OpponentPickedCardOverviewPosition" type="Node2D" parent="."]
+position = Vector2(74, 153)
+
 [node name="GuessACardHUD" type="Node2D" parent="."]
 
 [node name="GuessTheNumberInput" type="TextEdit" parent="GuessACardHUD"]

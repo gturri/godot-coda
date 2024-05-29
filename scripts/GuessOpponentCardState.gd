@@ -14,11 +14,12 @@ func _init(context_p, cardPickedDuringPlayerTurn_p, initialPositionOfTheCardPick
 func on_enter_state():
 	if cardPickedDuringPlayerTurn and not pickedCardTextureRect:
 		pickedCardTextureRect = TextureRect.new()
-		pickedCardTextureRect.set_texture(context.get_node("AvailableTiles").get_card_texture(cardPickedDuringPlayerTurn))
+		pickedCardTextureRect.set_texture(context.get_node("AvailableTiles").get_card_texture(cardPickedDuringPlayerTurn, true))
 		pickedCardTextureRect.position = initialPositionOfTheCardPicked
 		context.add_child(pickedCardTextureRect)
 		var tween = context.get_tree().create_tween()
 		tween.tween_property(pickedCardTextureRect, "position", context.get_node("PickedCardOverviewPosition").position, 0.5)
+		context.opponent_picked_card_at_the_beginning_of_the_turn.rpc(CardSerializer.serialize_card(cardPickedDuringPlayerTurn), initialPositionOfTheCardPicked)
 	context.get_node("GuessACardHUD").show()
 	context.get_node("InfoArea").log_info("Click the card in your opponent hand that you want to guess and enter a number")
 
@@ -63,7 +64,7 @@ func __on_bad_guess(guessedValue: int, guessedCard: Card) -> void:
 	if cardPickedDuringPlayerTurn:
 		context.get_node("InfoArea").log_info("The card you picked is added visible in your hand.")
 		cardPickedDuringPlayerTurn.isVisible = true
-		context.update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn, context.get_node("PickedCardOverviewPosition").position)
+		context.update_local_and_remote_hand_with_added_card(cardPickedDuringPlayerTurn, context.get_node("PickedCardOverviewPosition").position, context.get_node("OpponentPickedCardOverviewPosition").position)
 	context.change_player_and_start_new_turn.rpc()
 
 func start_decideWhatToDo_phase() -> void:

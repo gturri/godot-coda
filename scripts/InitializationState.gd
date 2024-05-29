@@ -7,7 +7,7 @@ func _init(context_p):
 func on_card_drawn(card: Card, card_id: int, cardPosition: Vector2) -> void:
 	if context.get_node("CurrentPlayerHand").cards.size() < context.nbCardsInitially:
 		context.get_node("AvailableTiles").player_picked_card.rpc(card_id)
-		context.update_local_and_remote_hand_with_added_card(card, cardPosition)
+		context.update_local_and_remote_hand_with_added_card(card, cardPosition, cardPosition)
 		if context.get_node("CurrentPlayerHand").cards.size() == context.nbCardsInitially \
 			and context.get_node("OpponentHand").cards.size() < context.nbCardsInitially:
 			context.get_node("InfoArea").log_info("Waiting for your opponent to pick his or her cards")

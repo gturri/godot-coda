@@ -28,3 +28,6 @@ func on_keep_guessing_button_pressed() -> void:
 
 func on_game_ended() -> void:
 	pass
+
+func opponent_picked_card_at_the_beginning_of_the_turn(card: Card, initialPosition: Vector2) -> void:
+	pass
