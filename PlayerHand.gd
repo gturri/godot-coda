@@ -22,6 +22,11 @@ func add_card_remotely(serializedCard: String, initialPositionOnTheBoard) -> voi
 func add_card(card: Card, initialPositionOnTheBoard: Vector2) -> void:
 	cards.append(card)
 	cards.sort_custom(Card.compare)
+
+	cardsToId.clear()
+	for i in cards.size():
+		cardsToId[cards[i]] = i
+
 	paint(initialPositionOnTheBoard-position)
 	cardAdded.emit()
 
@@ -43,10 +48,8 @@ func make_card_visible(cardId: int) -> void:
 		currentCardScene.queue_free()
 
 func paint(initialPositionNewCard: Vector2) -> void:
-	cardsToId.clear()
 	for i in cards.size():
 		var card = cards[i]
-		cardsToId[card] = i
 		var cardPosition = __cardId_to_position(i)
 		var cardScene = cardsToArea2D.get(card)
 		if not cardScene:
