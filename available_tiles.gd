@@ -67,8 +67,8 @@ func player_picked_card(card_id: int) -> void:
 	cards[card_id] = null
 	paint()
 
-func get_card_texture(card: Card, visible: bool) -> Texture2D:
+func get_card_texture(card: Card, isVisible: bool) -> Texture2D:
 	var source: TileSetAtlasSource = get_tileset().get_source(sourceId)
-	var textureRegion: Rect2i = source.get_tile_texture_region(card_to_tile(card, visible))
+	var textureRegion: Rect2i = source.get_tile_texture_region(card_to_tile(card, isVisible))
 	var tileImage: Image = source.texture.get_image().get_region(textureRegion)
 	return ImageTexture.create_from_image(tileImage)
