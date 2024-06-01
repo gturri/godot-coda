@@ -55,14 +55,12 @@ func paint(initialPositionNewCard: Vector2) -> void:
 		if not cardScene:
 			cardScene = create_card_scene(card, initialPositionNewCard)
 			cardsToArea2D[card] = cardScene
-			var cardTween = get_tree().create_tween()
-			cardTween.tween_property(cardScene, "position", cardPosition, transitionDurationInSecond)
+			if isCurrentPlayer and card.isVisible: cardScene.apply_shader(cardFoundShader)
+		create_tween_to_move_card(cardScene, cardPosition)
 
-			if isCurrentPlayer and card.isVisible:
-				cardsToArea2D[card].apply_shader(cardFoundShader)
-		else:
-			var cardTween = get_tree().create_tween()
-			cardTween.tween_property(cardScene, "position", cardPosition, transitionDurationInSecond)
+func create_tween_to_move_card(cardScene: Area2D, finalPosition: Vector2) -> void:
+	var tween = get_tree().create_tween()
+	tween.tween_property(cardScene, "position", finalPosition, transitionDurationInSecond)
 
 func create_card_scene(card: Card, cardPosition: Vector2) -> Area2D:
 	var scene := cardInPlayerHandScene.instantiate()
