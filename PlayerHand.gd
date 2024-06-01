@@ -9,7 +9,7 @@ signal cardAdded()
 signal selectedCard(cardIndex: int)
 
 var cardsToArea2D := {}
-var cardsToOverlay := {}
+var selectedCardOverlay
 var cardsToId := {}
 var opponentSelectedCardIndex
 @export var transitionDurationInSecond :float = 0.5
@@ -57,20 +57,9 @@ func paint(initialPositionNewCard: Vector2) -> void:
 
 			if isCurrentPlayer and card.isVisible:
 				cardsToArea2D[card].apply_shader(cardFoundShader)
-			elif not isCurrentPlayer and i == opponentSelectedCardIndex:
-				var overlay := create_overlay()
-				overlay.position = initialPositionNewCard
-				cardsToOverlay[i] = overlay
-				add_child(overlay)
-				var overlayTween = get_tree().create_tween()
-				overlayTween.tween_property(overlay, "position", cardPosition, transitionDurationInSecond)
 		else:
 			var cardTween = get_tree().create_tween()
 			cardTween.tween_property(cardScene, "position", cardPosition, transitionDurationInSecond)
-			var overlay = cardsToOverlay.get(i)
-			if overlay:
-				var overlayTween = get_tree().create_tween()
-				overlayTween.tween_property(overlay, "position", cardPosition, transitionDurationInSecond)
 
 func create_card_scene(card: Card, cardPosition: Vector2) -> Area2D:
 	var scene := cardInPlayerHandScene.instantiate()
@@ -81,16 +70,15 @@ func create_card_scene(card: Card, cardPosition: Vector2) -> Area2D:
 	add_child(scene)
 	return scene
 
+func card_selected(card: Card):
+	selectedCard.emit(cardsToId[card])
+
 func create_card_texture(card: Card) -> Texture:
 	var source: TileSetAtlasSource = get_tileset().get_source(sourceId)
 	var textureRegion: Rect2i = source.get_tile_texture_region(Vector2i(card.value, 2*card.color + (0 if isCurrentPlayer or card.isVisible else 1)))
 	var tileImage: Image = source.texture.get_image().get_region(textureRegion)
 	return ImageTexture.create_from_image(tileImage)
 
-func create_overlay() -> TextureRect:
-	var rect := TextureRect.new()
-	rect.texture = load("res://imgs/circle.svg")
-	return rect
 
 func __cardId_to_position(cardId: int) -> Vector2:
 	var startXPos :float = -(cards.size()-1)/2.0
@@ -99,17 +87,17 @@ func __cardId_to_position(cardId: int) -> Vector2:
 func set_opponent_selected_card(selectedCardIndex: int) -> void:
 	clear_opponent_selected_card()
 	opponentSelectedCardIndex = selectedCardIndex
-	var overlay := create_overlay()
-	overlay.position = __cardId_to_position(opponentSelectedCardIndex)
-	cardsToOverlay[opponentSelectedCardIndex] = overlay
-	add_child(overlay)
+	selectedCardOverlay = create_overlay(__cardId_to_position(opponentSelectedCardIndex))
+	add_child(selectedCardOverlay)
 
 func clear_opponent_selected_card() -> void:
-	var overlay = cardsToOverlay.get(opponentSelectedCardIndex)
-	if overlay:
-		overlay.queue_free()
-		cardsToOverlay.erase(opponentSelectedCardIndex)
+	if selectedCardOverlay:
+		selectedCardOverlay.queue_free()
+		selectedCardOverlay = null
 	opponentSelectedCardIndex = null
 
-func card_selected(card: Card):
-	selectedCard.emit(cardsToId[card])
+func create_overlay(overlayPosition: Vector2) -> TextureRect:
+	var rect := TextureRect.new()
+	rect.texture = load("res://imgs/circle.svg")
+	rect.position = overlayPosition
+	return rect
