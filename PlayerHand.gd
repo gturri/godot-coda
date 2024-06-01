@@ -1,5 +1,7 @@
 extends TileMap
 
+var cardFoundShader = load("res://cardFound.gdshader")
+
 var cards: Array[Card] = []
 const sourceId := 0
 @export var isCurrentPlayer := true
@@ -37,6 +39,8 @@ func make_card_visible(cardId: int) -> void:
 		overlay.position = cardsToArea2D[card].position
 		cardsToOverlay[cardId] = overlay
 		add_child(overlay)
+		cardsToArea2D[card].get_node("TextureRect").material = ShaderMaterial.new()
+		cardsToArea2D[card].get_node("TextureRect").material.set_shader(cardFoundShader)
 	else:
 		var currentCardArea2D = cardsToArea2D[card]
 		var newCardArea2D = get_card_Area2D(card)
