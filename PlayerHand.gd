@@ -37,12 +37,10 @@ func make_card_visible(cardId: int) -> void:
 	if isCurrentPlayer:
 		cardsToArea2D[card].apply_shader(cardFoundShader)
 	else:
-		var currentCardArea2D = cardsToArea2D[card]
-		var newCardArea2D = get_card_Area2D(card)
-		newCardArea2D.position = currentCardArea2D.position
-		cardsToArea2D[card] = newCardArea2D
-		add_child(newCardArea2D)
-		currentCardArea2D.queue_free()
+		var currentCardScene = cardsToArea2D[card]
+		var newCardScene = create_card_scene(card, currentCardScene.position)
+		cardsToArea2D[card] = newCardScene
+		currentCardScene.queue_free()
 
 func paint(initialPositionNewCard: Vector2) -> void:
 	cardsToId.clear()
@@ -50,15 +48,12 @@ func paint(initialPositionNewCard: Vector2) -> void:
 		var card = cards[i]
 		cardsToId[card] = i
 		var cardPosition = __cardId_to_position(i)
-		var cardTextureRect = cardsToArea2D.get(card)
-		if not cardTextureRect:
-			cardTextureRect = get_card_Area2D(card)
-			cardTextureRect.card = card
-			cardsToArea2D[card] = cardTextureRect
-			cardTextureRect.position = initialPositionNewCard
-			add_child(cardTextureRect)
+		var cardScene = cardsToArea2D.get(card)
+		if not cardScene:
+			cardScene = create_card_scene(card, initialPositionNewCard)
+			cardsToArea2D[card] = cardScene
 			var cardTween = get_tree().create_tween()
-			cardTween.tween_property(cardTextureRect, "position", cardPosition, transitionDurationInSecond)
+			cardTween.tween_property(cardScene, "position", cardPosition, transitionDurationInSecond)
 
 			if isCurrentPlayer and card.isVisible:
 				cardsToArea2D[card].apply_shader(cardFoundShader)
@@ -71,20 +66,26 @@ func paint(initialPositionNewCard: Vector2) -> void:
 				overlayTween.tween_property(overlay, "position", cardPosition, transitionDurationInSecond)
 		else:
 			var cardTween = get_tree().create_tween()
-			cardTween.tween_property(cardTextureRect, "position", cardPosition, transitionDurationInSecond)
+			cardTween.tween_property(cardScene, "position", cardPosition, transitionDurationInSecond)
 			var overlay = cardsToOverlay.get(i)
 			if overlay:
 				var overlayTween = get_tree().create_tween()
 				overlayTween.tween_property(overlay, "position", cardPosition, transitionDurationInSecond)
 
-func get_card_Area2D(card: Card) -> Area2D:
-	var rect := cardInPlayerHandScene.instantiate()
-	rect.selectedCard.connect(card_selected)
+func create_card_scene(card: Card, cardPosition: Vector2) -> Area2D:
+	var scene := cardInPlayerHandScene.instantiate()
+	scene.selectedCard.connect(card_selected)
+	scene.get_node("TextureRect").set_texture(create_card_texture(card))
+	scene.position = cardPosition
+	scene.card = card
+	add_child(scene)
+	return scene
+
+func create_card_texture(card: Card) -> Texture:
 	var source: TileSetAtlasSource = get_tileset().get_source(sourceId)
 	var textureRegion: Rect2i = source.get_tile_texture_region(Vector2i(card.value, 2*card.color + (0 if isCurrentPlayer or card.isVisible else 1)))
 	var tileImage: Image = source.texture.get_image().get_region(textureRegion)
-	rect.get_node("TextureRect").set_texture(ImageTexture.create_from_image(tileImage))
-	return rect
+	return ImageTexture.create_from_image(tileImage)
 
 func create_overlay() -> TextureRect:
 	var rect := TextureRect.new()
