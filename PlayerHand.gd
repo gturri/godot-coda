@@ -1,5 +1,7 @@
 extends TileMap
 
+var cardFoundShader = load("res://cardFound.gdshader")
+
 var cards: Array[Card] = []
 const sourceId := 0
 @export var isCurrentPlayer := true
@@ -33,10 +35,7 @@ func make_card_visible(cardId: int) -> void:
 	var card = cards[cardId]
 	card.isVisible = true
 	if isCurrentPlayer:
-		var overlay := create_overlay()
-		overlay.position = cardsToArea2D[card].position
-		cardsToOverlay[cardId] = overlay
-		add_child(overlay)
+		cardsToArea2D[card].apply_shader(cardFoundShader)
 	else:
 		var currentCardArea2D = cardsToArea2D[card]
 		var newCardArea2D = get_card_Area2D(card)
@@ -61,7 +60,9 @@ func paint(initialPositionNewCard: Vector2) -> void:
 			var cardTween = get_tree().create_tween()
 			cardTween.tween_property(cardTextureRect, "position", cardPosition, transitionDurationInSecond)
 
-			if (isCurrentPlayer and card.isVisible) or (not isCurrentPlayer and i == opponentSelectedCardIndex):
+			if isCurrentPlayer and card.isVisible:
+				cardsToArea2D[card].apply_shader(cardFoundShader)
+			elif not isCurrentPlayer and i == opponentSelectedCardIndex:
 				var overlay := create_overlay()
 				overlay.position = initialPositionNewCard
 				cardsToOverlay[i] = overlay
