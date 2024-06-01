@@ -6,7 +6,7 @@ const sourceId := 0
 signal cardAdded()
 signal selectedCard(cardIndex: int)
 
-var cardsToTextures := {}
+var cardsToArea2D := {}
 var cardsToOverlay := {}
 var cardsToId := {}
 var opponentSelectedCardIndex
@@ -34,16 +34,16 @@ func make_card_visible(cardId: int) -> void:
 	card.isVisible = true
 	if isCurrentPlayer:
 		var overlay := create_overlay()
-		overlay.position = cardsToTextures[card].position
+		overlay.position = cardsToArea2D[card].position
 		cardsToOverlay[cardId] = overlay
 		add_child(overlay)
 	else:
-		var currentCardTextureRect = cardsToTextures[card]
-		var newCardTextureRect = get_card_textureRect(card)
-		newCardTextureRect.position = currentCardTextureRect.position
-		cardsToTextures[card] = newCardTextureRect
-		add_child(newCardTextureRect)
-		currentCardTextureRect.queue_free()
+		var currentCardArea2D = cardsToArea2D[card]
+		var newCardArea2D = get_card_Area2D(card)
+		newCardArea2D.position = currentCardArea2D.position
+		cardsToArea2D[card] = newCardArea2D
+		add_child(newCardArea2D)
+		currentCardArea2D.queue_free()
 
 func paint(initialPositionNewCard: Vector2) -> void:
 	cardsToId.clear()
@@ -51,11 +51,11 @@ func paint(initialPositionNewCard: Vector2) -> void:
 		var card = cards[i]
 		cardsToId[card] = i
 		var cardPosition = __cardId_to_position(i)
-		var cardTextureRect = cardsToTextures.get(card)
+		var cardTextureRect = cardsToArea2D.get(card)
 		if not cardTextureRect:
-			cardTextureRect = get_card_textureRect(card)
+			cardTextureRect = get_card_Area2D(card)
 			cardTextureRect.card = card
-			cardsToTextures[card] = cardTextureRect
+			cardsToArea2D[card] = cardTextureRect
 			cardTextureRect.position = initialPositionNewCard
 			add_child(cardTextureRect)
 			var cardTween = get_tree().create_tween()
@@ -76,7 +76,7 @@ func paint(initialPositionNewCard: Vector2) -> void:
 				var overlayTween = get_tree().create_tween()
 				overlayTween.tween_property(overlay, "position", cardPosition, transitionDurationInSecond)
 
-func get_card_textureRect(card: Card):
+func get_card_Area2D(card: Card) -> Area2D:
 	var rect := cardInPlayerHandScene.instantiate()
 	rect.selectedCard.connect(card_selected)
 	var source: TileSetAtlasSource = get_tileset().get_source(sourceId)
