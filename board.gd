@@ -69,6 +69,9 @@ func on_keep_guessing_button_pressed() -> void:
 func on_stop_your_turn_button_pressed() -> void:
 	state.on_stop_your_turn_button_pressed()
 
+func _input(event):
+	state.input(event)
+
 @rpc("any_peer", "call_local", "reliable")
 func play_audio_picked_card() -> void:
 	$Audio/PickedCard.play()

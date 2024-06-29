@@ -31,3 +31,6 @@ func on_game_ended() -> void:
 
 func opponent_picked_card_at_the_beginning_of_the_turn(_card: Card, _initialPosition: Vector2) -> void:
 	pass
+
+func input(_event) -> void:
+	pass

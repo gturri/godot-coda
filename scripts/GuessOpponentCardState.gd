@@ -74,6 +74,11 @@ func start_decideWhatToDo_phase() -> void:
 	context.get_node("GuessACardHUD").hide()
 	context.set_state(DecideWhatToDoAfterASuccessfulGuessState.new(context, self))
 
+func input(event):
+	if  context.get_node("GuessACardHUD/GuessTheNumberInput").has_focus() and event.is_action_pressed("submit_form"):
+		context.get_viewport().set_input_as_handled()
+		context.on_guess_button_pressed()
+
 func _notification(notif):
 	if notif == NOTIFICATION_PREDELETE: # Destructor; see https://docs.godotengine.org/en/4.2/tutorials/best_practices/godot_notifications.html
 		pickedCardTextureRect.queue_free()
