@@ -16,7 +16,7 @@ nb: it uses the port 6666 and uses UDP (in case you need to open some firewall p
 # How to play
 ## The concept
 
-There are 11 yellow cards (numbered from 1 to 11) and 11 green cards (numbered from 1 to 11).
+There are 12 yellow cards (numbered from 1 to 12) and 12 green cards (numbered from 1 to 12).
 
 Each player starts with 4 random cards. The cards are sorted by increasing order in the player hands (If you have two cards with the same value, the green one is considered the smaller one).
 

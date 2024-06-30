@@ -2,7 +2,7 @@ extends TileMap
 
 const nbColors := 2
 const sourceId := 0
-@export var maxValue := 11
+@export var maxValue := 12
 @export var cardsPerRow := 5
 var cards: Array[Card] = []
 signal cardDrawn(card: Card, card_id: int, cardPosition: Vector2)
