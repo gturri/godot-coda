@@ -47,6 +47,13 @@ func make_card_visible(cardId: int) -> void:
 		cardsToArea2D[card] = newCardScene
 		currentCardScene.queue_free()
 
+func reveal_cards_after_game_over() -> void:
+	for cardId in cards.size():
+		var card: Card = cards[cardId]
+		if not card.isVisible:
+			make_card_visible(cardId)
+			cardsToArea2D[card].apply_shader(cardFoundShader) # TODO: apply a dedicated shader?
+
 func paint(initialPositionNewCard: Vector2) -> void:
 	for i in cards.size():
 		var card = cards[i]
