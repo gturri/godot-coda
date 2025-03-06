@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://cnekhgng88e36"]
 
-[ext_resource type="Script" path="res://board.gd" id="1_8lpg8"]
+[ext_resource type="Script" uid="uid://bjoybd3tekutd" path="res://board.gd" id="1_8lpg8"]
 [ext_resource type="PackedScene" uid="uid://dcf5xakj75jbd" path="res://available_tiles.tscn" id="1_lhp38"]
 [ext_resource type="PackedScene" uid="uid://hp0x7r5vkjxv" path="res://PlayerHand.tscn" id="2_3pi1m"]
 [ext_resource type="PackedScene" uid="uid://7nus6x8j4goo" path="res://InfoArea.tscn" id="4_xewae"]

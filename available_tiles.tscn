@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dcf5xakj75jbd"]
 
 [ext_resource type="TileSet" uid="uid://bd4h715agxc40" path="res://CardsTileSet.tres" id="1_oo7uq"]
-[ext_resource type="Script" path="res://available_tiles.gd" id="2_nsve2"]
+[ext_resource type="Script" uid="uid://b7xhq2koqbqoi" path="res://available_tiles.gd" id="2_nsve2"]
 
 [node name="AvailableTiles" type="TileMap"]
 tile_set = ExtResource("1_oo7uq")
