@@ -1,4 +1,4 @@
-extends TileMap
+extends TileMapLayer
 
 var cardFoundShader = load("res://cardFound.gdshader")
 
@@ -82,7 +82,7 @@ func card_selected(card: Card):
 	selectedCard.emit(cardsToId[card])
 
 func create_card_texture(card: Card) -> Texture:
-	var source: TileSetAtlasSource = get_tileset().get_source(sourceId)
+	var source: TileSetAtlasSource = tile_set.get_source(sourceId)
 	var textureRegion: Rect2i = source.get_tile_texture_region(Vector2i(card.value, 2*card.color + (0 if isCurrentPlayer or card.isVisible else 1)))
 	var tileImage: Image = source.texture.get_image().get_region(textureRegion)
 	return ImageTexture.create_from_image(tileImage)

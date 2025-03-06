@@ -1,4 +1,4 @@
-extends TileMap
+extends TileMapLayer
 
 const nbColors := 2
 const sourceId := 0
@@ -37,9 +37,9 @@ func paint() -> void:
 	for i in cards.size():
 		var tile_pos: Vector2i = cardId_to_cellPos(i)
 		if cards[i]:
-			set_cell(0, tile_pos, sourceId, card_to_tile(cards[i], false))
+			set_cell(tile_pos, sourceId, card_to_tile(cards[i], false))
 		else:
-			erase_cell(0, tile_pos)
+			erase_cell(tile_pos)
 
 func cardId_to_cellPos(id: int) -> Vector2i:
 	@warning_ignore("integer_division")
@@ -68,7 +68,7 @@ func player_picked_card(card_id: int) -> void:
 	paint()
 
 func get_card_texture(card: Card, isVisible: bool) -> Texture2D:
-	var source: TileSetAtlasSource = get_tileset().get_source(sourceId)
+	var source: TileSetAtlasSource = tile_set.get_source(sourceId)
 	var textureRegion: Rect2i = source.get_tile_texture_region(card_to_tile(card, isVisible))
 	var tileImage: Image = source.texture.get_image().get_region(textureRegion)
 	return ImageTexture.create_from_image(tileImage)
