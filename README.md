@@ -1,3 +1,16 @@
+```
+  ______________________________________
+/ This repo has moved to                 \\
+\\ https://codeberg.org/gturri/godot-coda /
+  --------------------------------------
+         \   ^__^ 
+          \  (oo)\_______
+             (__)\       )\/\\
+                 ||----w |
+                 ||     ||
+```
+
+
 A 2 players cards game made with [Godot](https://godotengine.org/).
 
 # How to install
